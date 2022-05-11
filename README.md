@@ -87,49 +87,8 @@ Now navigate to http://localhost:5001, and you should see the "Hello from Python
 ```sh
 kubectl version
 ```
-- Create a file named [deployment.yaml](./deployment.yaml) and add the following contents to it and then save it:
+- Create a file named [deployment.yaml](./deployment.yaml).
 
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: myapp-service
-spec:
-  selector:
-    app: myapp
-  ports:
-  - protocol: "TCP"
-    port: 6000
-    targetPort: 5000
-  type: LoadBalancer
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: myapp
-spec:
-  selector:
-    matchLabels:
-      app: myapp
-  replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-  template:
-    metadata:
-      labels:
-        app: myapp
-    spec:
-      containers:
-      - name: myapp
-        image: myapp:latest
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 5000
-```
 This YAML file is the instructions to Kubernetes for what you want running. It is telling Kubernetes the following:
 
     - You want a load-balanced service exposing port 6000
@@ -144,7 +103,7 @@ kubectl apply -f deployment.yaml
 kubectl get pods
 ```
 
-Now navigate to http://localhost:6000, and you should see the “Hello from Python!” message.
+Now navigate to http://localhost:8080/, and you should see the “Hello from Python!” message.
 
 That’s it! The application is now running in Kubernetes
 
@@ -158,6 +117,11 @@ kubectl delete --all deployments
 **kubectl delete all pods**
 ```sh
 kubectl delete --all pods
+```
+
+**To check the service**
+```sh
+kubectl describe service myapp-service
 ```
 
 ## 📜 Release History
